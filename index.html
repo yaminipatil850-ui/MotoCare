@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoCare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #0f172a;
+            --surface-color: #1e293b;
+            --primary: #f97316;
+            --primary-hover: #ea580c;
+            --secondary: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --border: #334155;
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- TYPOGRAPHY & UTILITIES --- */
+        h1,
+        h2,
+        h3,
+        h4 {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .mt-2 {
+            margin-top: 1rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .badge.warning {
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--primary);
+        }
+
+        .badge.danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        /* --- FORMS & BUTTONS --- */
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            width: auto;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-dark);
+            color: #fff;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+
+        /* --- AUTH LAYOUT --- */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--surface-color);
+            padding: 40px;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        .auth-switch:hover {
+            text-decoration: underline;
+        }
+
+        /* --- APP LAYOUT --- */
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--surface-color);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 0 20px 20px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .nav-link {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(249, 115, 22, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+            transition: var(--transition);
+        }
+
+        .view {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- CARDS & TABLES --- */
+        .card {
+            background: var(--surface-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .stat-card h2 {
+            font-size: 2rem;
+            margin: 10px 0 0 0;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* --- TOAST --- */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--success);
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadeinToast 0.5s, fadeoutToast 0.5s 2.5s;
+        }
+
+        @keyframes fadeinToast {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeoutToast {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        /* --- RESPONSIVE --- */
+        .mobile-nav-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .app-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 250px;
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+            }
+
+            .sidebar.mobile-active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-top: 60px;
+            }
+
+            .mobile-nav-toggle {
+                display: block;
+                position: fixed;
+                top: 15px;
+                left: 20px;
+                z-index: 1001;
+                background: var(--surface-color);
+                padding: 8px 12px;
+                border-radius: 8px;
+                border: 1px solid var(--border);
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mobile-nav-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></div>
+
+    <div id="auth-wrapper" class="auth-container">
+
+        <div id="view-login-user" class="view active auth-card">
+            <div class="text-center mb-2">
+                <i class="fa-solid fa-motorcycle text-primary" style="font-size: 3rem;"></i>
+                <h2>MotoCare</h2>
+                <p>User Login</p>
+            </div>
+            <form id="loginForm" onsubmit="loginUser(event)">
+                <div class="form-group"><label>Email Address</label><input type="email" id="loginEmail"
+                        class="form-control" placeholder="user@example.com" value="user@example.com" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="loginPass"
+                        class="form-control" value="password" required></div>
+                <button type="submit" class="btn mt-2">Login as User</button>
+            </form>
+            <div class="auth-switch" onclick="switchAuthView('view-register-user')">Don't have an account? Register
+            </div>
+            <div class="auth-switch" style="color: var(--danger); margin-top: 30px;"
+                onclick="switchAuthView('view-login-admin')"><i class="fa-solid fa-shield-halved"></i> Admin Portal
+            </div>
+        </div>
+
+        <div id="view-register-user" class="view auth-card">
+            <div class="text-center mb-2">
+                <h2>Create Account</h2>
+            </div>
+            <form id="regForm" onsubmit="registerUser(event)">
+                <div class="form-group"><label>Full Name</label><input type="text" id="regName" class="form-control"
+                        required></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="regEmail"
+                        class="form-control" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="regPass" class="form-control"
+                        required minlength="6"></div>
+                <div class="form-group"><label>Bike Model</label><input type="text" id="regBike" class="form-control"
+                        placeholder="e.g. Royal Enfield Classic 350" required></div>
+                <button type="submit" class="btn mt-2">Register</button>
+            </form>
+            <div class="auth-switch" onclick="switchAuthView('view-login-user')">Already have an account? Login</div>
+        </div>
+
+        <div id="view-login-admin" class="view auth-card" style="border-top: 4px solid var(--danger);">
+            <div class="text-center mb-2">
+                <i class="fa-solid fa-user-tie" style="font-size: 3rem; color: var(--danger);"></i>
+                <h2>Admin Portal</h2>
+            </div>
+            <form onsubmit="loginAdmin(event)">
+                <div class="form-group"><label>Admin Username</label><input type="text" id="admin-user"
+                        class="form-control" placeholder="admin" required></div>
+                <div class="form-group"><label>Admin Password</label><input type="password" id="admin-pass"
+                        class="form-control" placeholder="admin" required></div>
+                <button type="submit" class="btn btn-danger mt-2">Login to Dashboard</button>
+            </form>
+            <div class="auth-switch" onclick="switchAuthView('view-login-user')"><i class="fa-solid fa-arrow-left"></i>
+                Back to User App</div>
+        </div>
+    </div>
+
+    <div id="app-wrapper" class="app-layout" style="display: none;">
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-brand">MotoCare IN</div>
+
+            <div id="nav-user" style="display: none;">
+                <a class="nav-link active" onclick="navigateApp('user-dash', this)"><i class="fa-solid fa-house"></i>
+                    Dashboard</a>
+                <a class="nav-link" onclick="navigateApp('user-book', this)"><i class="fa-solid fa-plus-circle"></i>
+                    Book Service</a>
+                <a class="nav-link" onclick="navigateApp('user-history', this)"><i
+                        class="fa-solid fa-clock-rotate-left"></i> My Bookings</a>
+                <a class="nav-link" onclick="navigateApp('user-profile', this)"><i class="fa-solid fa-user"></i>
+                    Profile</a>
+            </div>
+
+            <div id="nav-admin" style="display: none;">
+                <p style="padding: 0 20px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">
+                    Admin Tools</p>
+                <a class="nav-link active" onclick="navigateApp('admin-dash', this)"><i
+                        class="fa-solid fa-chart-line"></i> Overview</a>
+                <a class="nav-link" onclick="navigateApp('admin-bookings', this)"><i
+                        class="fa-solid fa-calendar-check"></i> Bookings</a>
+                <a class="nav-link" onclick="navigateApp('admin-mechanics', this)"><i
+                        class="fa-solid fa-users-gear"></i> Mechanics</a>
+                <a class="nav-link" onclick="navigateApp('admin-services', this)"><i class="fa-solid fa-tags"></i>
+                    Services</a>
+                <a class="nav-link" onclick="navigateApp('admin-users', this)"><i class="fa-solid fa-users"></i>
+                    Users</a>
+            </div>
+
+            <div style="margin-top: auto;">
+                <a class="nav-link" style="color: var(--danger);" onclick="logout()"><i
+                        class="fa-solid fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <div id="user-dash" class="view">
+                <div class="flex-between mb-2">
+                    <div>
+                        <h2 id="udash-name">Welcome!</h2>
+                        <p id="udash-bike">Bike Model</p>
+                    </div>
+                    <button class="btn btn-small"
+                        onclick="navigateApp('user-book', document.querySelectorAll('#nav-user .nav-link')[1])">Book
+                        Now</button>
+                </div>
+                <div class="grid-2">
+                    <div class="card stat-card" style="background: rgba(249,115,22,0.1); border-color: var(--primary);">
+                        <i class="fa-solid fa-bell"></i>
+                        <h3>Service Due</h3>
+                        <p>Ensure regular checkups</p>
+                    </div>
+                    <div class="card stat-card">
+                        <i class="fa-solid fa-check-circle text-success"></i>
+                        <h3>Total Bookings</h3>
+                        <h2 id="udash-total">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div id="user-book" class="view">
+                <h2>Book a Service</h2>
+                <div class="card" style="max-width: 600px;">
+                    <form id="bookingForm" onsubmit="createBooking(event)">
+                        <div class="form-group">
+                            <label>Select Service</label>
+                            <select class="form-control" id="book-service" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Date & Time (IST)</label>
+                            <input type="datetime-local" id="book-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Mechanic</label>
+                            <select class="form-control" id="book-mechanic"></select>
+                        </div>
+                        <button type="submit" class="btn mt-2">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="user-history" class="view">
+                <h2>My Bookings</h2>
+                <div id="user-bookings-list"></div>
+            </div>
+
+            <div id="user-profile" class="view">
+                <h2>My Profile</h2>
+                <div class="card" style="max-width: 600px;">
+                    <form onsubmit="updateProfile(event)">
+                        <div class="form-group"><label>Name</label><input type="text" id="prof-name"
+                                class="form-control" required></div>
+                        <div class="form-group"><label>Email</label><input type="email" id="prof-email"
+                                class="form-control" disabled></div>
+                        <div class="form-group"><label>Bike Model</label><input type="text" id="prof-bike"
+                                class="form-control" required></div>
+                        <button type="submit" class="btn mt-2">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="admin-dash" class="view">
+                <div class="flex-between mb-2">
+                    <h2>Admin Dashboard</h2><span class="badge danger" style="color: white;">Super Admin</span>
+                </div>
+                <div class="grid-3 mb-2">
+                    <div class="card stat-card"><i class="fa-solid fa-calendar-check text-primary"></i>
+                        <p>Total Bookings</p>
+                        <h2 id="adash-bookings">0</h2>
+                    </div>
+                    <div class="card stat-card"><i class="fa-solid fa-wallet text-success"></i>
+                        <p>Total Revenue (INR)</p>
+                        <h2 id="adash-revenue">₹0</h2>
+                    </div>
+                    <div class="card stat-card"><i class="fa-solid fa-users text-secondary"></i>
+                        <p>Registered Users</p>
+                        <h2 id="adash-users">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div id="admin-bookings" class="view">
+                <h2>Booking Management</h2>
+                <div class="card table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Service</th>
+                                <th>Date & Time (IST)</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-bookings-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="admin-mechanics" class="view">
+                <div class="flex-between mb-2">
+                    <h2>Mechanic Management</h2>
+                </div>
+                <div class="card">
+                    <form class="flex-between" style="gap:10px; margin-bottom: 20px;" onsubmit="addMechanic(event)">
+                        <input type="text" id="new-mech-name" class="form-control" placeholder="Mechanic Name" required>
+                        <input type="text" id="new-mech-spec" class="form-control" placeholder="Specialty" required>
+                        <button type="submit" class="btn btn-small" style="width: 150px;"><i
+                                class="fa-solid fa-plus"></i> Add</button>
+                    </form>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Specialty</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-mechanics-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="admin-services" class="view">
+                <div class="flex-between mb-2">
+                    <h2>Services & Pricing</h2>
+                </div>
+                <div class="card">
+                    <form class="flex-between" style="gap:10px; margin-bottom: 20px;" onsubmit="addService(event)">
+                        <input type="text" id="new-srv-name" class="form-control" placeholder="Service Name" required>
+                        <input type="number" id="new-srv-price" class="form-control" placeholder="Price (₹)" required>
+                        <button type="submit" class="btn btn-small" style="width: 150px;"><i
+                                class="fa-solid fa-plus"></i> Add</button>
+                    </form>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Price (₹)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-services-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="admin-users" class="view">
+                <h2>User Accounts</h2>
+                <div class="card table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Bike</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="toast">Message here</div>
+
+    <script>
+        // ==========================================
+        // DATABASE INITIALIZATION (LocalStorage)
+        // ==========================================
+        // Note: Changed keys to 'mc_in_' to ensure a fresh DB loads with Indian settings
+        const DB_KEYS = { USERS: 'mc_in_users', SERVICES: 'mc_in_services', MECHANICS: 'mc_in_mechanics', BOOKINGS: 'mc_in_bookings' };
+
+        function initDB() {
+            if (!localStorage.getItem(DB_KEYS.USERS)) {
+                localStorage.setItem(DB_KEYS.USERS, JSON.stringify([{ id: 1, name: 'Demo User', email: 'user@example.com', password: 'password', bike: 'Royal Enfield Classic 350' }]));
+            }
+            if (!localStorage.getItem(DB_KEYS.SERVICES)) {
+                // Realistic Indian pricing for bike servicing
+                localStorage.setItem(DB_KEYS.SERVICES, JSON.stringify([{ id: 1, name: 'General Service', price: 1500 }, { id: 2, name: 'Oil Change', price: 800 }]));
+            }
+            if (!localStorage.getItem(DB_KEYS.MECHANICS)) {
+                localStorage.setItem(DB_KEYS.MECHANICS, JSON.stringify([{ id: 1, name: 'Rahul Sharma', spec: 'General Servicing' }, { id: 2, name: 'Amit Kumar', spec: 'Engine & Electricals' }]));
+            }
+            if (!localStorage.getItem(DB_KEYS.BOOKINGS)) {
+                localStorage.setItem(DB_KEYS.BOOKINGS, JSON.stringify([]));
+            }
+        }
+
+        const getDB = (key) => JSON.parse(localStorage.getItem(key));
+        const setDB = (key, data) => localStorage.setItem(key, JSON.stringify(data));
+
+        let activeUser = null;
+
+        // ==========================================
+        // UTILITIES
+        // ==========================================
+
+        // Formats a raw date string into Indian Standard Time (IST) readable format
+        function formatIST(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleString('en-IN', {
+                timeZone: 'Asia/Kolkata',
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            toast.innerText = msg; toast.className = "show";
+            setTimeout(() => toast.className = toast.className.replace("show", ""), 3000);
+        }
+
+        // ==========================================
+        // AUTHENTICATION
+        // ==========================================
+        function switchAuthView(viewId) {
+            document.querySelectorAll('#auth-wrapper .view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+        }
+
+        function registerUser(e) {
+            e.preventDefault();
+            const users = getDB(DB_KEYS.USERS);
+            const email = document.getElementById('regEmail').value;
+            if (users.find(u => u.email === email)) return showToast('Email already registered!');
+
+            const newUser = {
+                id: Date.now(),
+                name: document.getElementById('regName').value,
+                email: email,
+                password: document.getElementById('regPass').value,
+                bike: document.getElementById('regBike').value
+            };
+            users.push(newUser);
+            setDB(DB_KEYS.USERS, users);
+            showToast('Registration successful! Please login.');
+            switchAuthView('view-login-user');
+            e.target.reset();
+        }
+
+        function loginUser(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+            const user = getDB(DB_KEYS.USERS).find(u => u.email === email && u.password === pass);
+
+            if (user) {
+                activeUser = user;
+                launchApp('user');
+            } else {
+                showToast('Invalid email or password');
+            }
+        }
+
+        function loginAdmin(e) {
+            e.preventDefault();
+            const user = document.getElementById('admin-user').value;
+            const pass = document.getElementById('admin-pass').value;
+            if (user === 'admin' && pass === 'admin') {
+                activeUser = 'admin';
+                launchApp('admin');
+            } else {
+                showToast('Invalid Admin Credentials');
+            }
+        }
+
+        function logout() {
+            activeUser = null;
+            document.getElementById('app-wrapper').style.display = 'none';
+            document.getElementById('auth-wrapper').style.display = 'flex';
+            switchAuthView('view-login-user');
+            showToast('Logged out');
+        }
+
+        function launchApp(role) {
+            document.getElementById('auth-wrapper').style.display = 'none';
+            document.getElementById('app-wrapper').style.display = 'flex';
+
+            if (role === 'admin') {
+                document.getElementById('nav-admin').style.display = 'block';
+                document.getElementById('nav-user').style.display = 'none';
+                refreshAdminViews();
+                navigateApp('admin-dash', document.querySelectorAll('#nav-admin .nav-link')[0]);
+                showToast('Welcome Admin');
+            } else {
+                document.getElementById('nav-user').style.display = 'block';
+                document.getElementById('nav-admin').style.display = 'none';
+                refreshUserViews();
+                navigateApp('user-dash', document.querySelectorAll('#nav-user .nav-link')[0]);
+                showToast(`Welcome back, ${activeUser.name}`);
+            }
+        }
+
+        // ==========================================
+        // USER FUNCTIONALITY
+        // ==========================================
+        function refreshUserViews() {
+            document.getElementById('udash-name').innerText = `Welcome, ${activeUser.name}!`;
+            document.getElementById('udash-bike').innerText = activeUser.bike;
+
+            document.getElementById('prof-name').value = activeUser.name;
+            document.getElementById('prof-email').value = activeUser.email;
+            document.getElementById('prof-bike').value = activeUser.bike;
+
+            const srvSelect = document.getElementById('book-service');
+            srvSelect.innerHTML = '<option value="">Choose Service...</option>';
+            getDB(DB_KEYS.SERVICES).forEach(s => srvSelect.innerHTML += `<option value="${s.id}">${s.name} - ₹${s.price}</option>`);
+
+            const mechSelect = document.getElementById('book-mechanic');
+            mechSelect.innerHTML = '<option value="">Any Available</option>';
+            getDB(DB_KEYS.MECHANICS).forEach(m => mechSelect.innerHTML += `<option value="${m.name}">${m.name} (${m.spec})</option>`);
+
+            const bookings = getDB(DB_KEYS.BOOKINGS).filter(b => b.userId === activeUser.id);
+            document.getElementById('udash-total').innerText = bookings.length;
+
+            const bList = document.getElementById('user-bookings-list');
+            bList.innerHTML = '';
+            if (bookings.length === 0) bList.innerHTML = '<p>No bookings found.</p>';
+
+            bookings.slice().reverse().forEach(b => {
+                let bClass = b.status === 'Completed' ? 'success' : (b.status === 'Pending' ? 'warning' : 'primary');
+                bList.innerHTML += `
+            <div class="card">
+                <div class="flex-between" style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px;">
+                    <div><h4>${b.serviceName}</h4><p>${formatIST(b.date)}</p></div>
+                    <span class="badge ${bClass}">${b.status}</span>
+                </div>
+                <p>Mechanic: ${b.mechanic || 'Not Assigned'} | <strong>Total: ₹${b.price}</strong></p>
+            </div>`;
+            });
+        }
+
+        function createBooking(e) {
+            e.preventDefault();
+            const srvId = document.getElementById('book-service').value;
+            const service = getDB(DB_KEYS.SERVICES).find(s => s.id == srvId);
+
+            const newBooking = {
+                id: 'BK' + Math.floor(Math.random() * 10000),
+                userId: activeUser.id,
+                userName: activeUser.name,
+                serviceName: service.name,
+                price: service.price,
+                date: document.getElementById('book-date').value,
+                mechanic: document.getElementById('book-mechanic').value || 'Any',
+                status: 'Pending'
+            };
+
+            const bookings = getDB(DB_KEYS.BOOKINGS);
+            bookings.push(newBooking);
+            setDB(DB_KEYS.BOOKINGS, bookings);
+
+            showToast('Service Booked Successfully!');
+            e.target.reset();
+            refreshUserViews();
+            navigateApp('user-history', document.querySelectorAll('#nav-user .nav-link')[2]);
+        }
+
+        function updateProfile(e) {
+            e.preventDefault();
+            activeUser.name = document.getElementById('prof-name').value;
+            activeUser.bike = document.getElementById('prof-bike').value;
+
+            const users = getDB(DB_KEYS.USERS);
+            const index = users.findIndex(u => u.id === activeUser.id);
+            users[index] = activeUser;
+            setDB(DB_KEYS.USERS, users);
+
+            refreshUserViews();
+            showToast('Profile Updated!');
+        }
+
+        // ==========================================
+        // ADMIN FUNCTIONALITY
+        // ==========================================
+        function refreshAdminViews() {
+            const bookings = getDB(DB_KEYS.BOOKINGS);
+            const users = getDB(DB_KEYS.USERS);
+            const services = getDB(DB_KEYS.SERVICES);
+            const mechanics = getDB(DB_KEYS.MECHANICS);
+
+            document.getElementById('adash-bookings').innerText = bookings.length;
+            document.getElementById('adash-users').innerText = users.length;
+            const revenue = bookings.filter(b => b.status === 'Completed').reduce((sum, b) => sum + Number(b.price), 0);
+            document.getElementById('adash-revenue').innerText = `₹${revenue}`;
+
+            const bList = document.getElementById('admin-bookings-list');
+            bList.innerHTML = '';
+            bookings.slice().reverse().forEach((b, index) => {
+                let bClass = b.status === 'Completed' ? 'success' : (b.status === 'Pending' ? 'warning' : 'primary');
+                let realIndex = bookings.length - 1 - index;
+                bList.innerHTML += `
+                <tr>
+                    <td>${b.id}</td><td>${b.userName}</td><td>${b.serviceName}</td><td>${formatIST(b.date)}</td>
+                    <td><span class="badge ${bClass}">${b.status}</span></td>
+                    <td>
+                        <select class="form-control" style="padding: 5px; width: auto;" onchange="updateBookingStatus(${realIndex}, this.value)">
+                            <option value="Pending" ${b.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Assigned" ${b.status === 'Assigned' ? 'selected' : ''}>Assigned</option>
+                            <option value="Completed" ${b.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                        </select>
+                    </td>
+                </tr>`;
+            });
+
+            const mList = document.getElementById('admin-mechanics-list');
+            mList.innerHTML = '';
+            mechanics.forEach(m => {
+                mList.innerHTML += `<tr><td><strong>${m.name}</strong></td><td>${m.spec}</td>
+                <td><button class="btn btn-small btn-danger" onclick="deleteItem('${DB_KEYS.MECHANICS}', ${m.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+            });
+
+            const sList = document.getElementById('admin-services-list');
+            sList.innerHTML = '';
+            services.forEach(s => {
+                sList.innerHTML += `<tr><td><strong>${s.name}</strong></td><td>₹${s.price}</td>
+                <td><button class="btn btn-small btn-danger" onclick="deleteItem('${DB_KEYS.SERVICES}', ${s.id})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+            });
+
+            const uList = document.getElementById('admin-users-list');
+            uList.innerHTML = '';
+            users.forEach(u => {
+                uList.innerHTML += `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.bike}</td></tr>`;
+            });
+        }
+
+        function updateBookingStatus(index, newStatus) {
+            const bookings = getDB(DB_KEYS.BOOKINGS);
+            bookings[index].status = newStatus;
+            setDB(DB_KEYS.BOOKINGS, bookings);
+            refreshAdminViews();
+            showToast('Booking status updated!');
+        }
+
+        function addMechanic(e) {
+            e.preventDefault();
+            const mechanics = getDB(DB_KEYS.MECHANICS);
+            mechanics.push({
+                id: Date.now(),
+                name: document.getElementById('new-mech-name').value,
+                spec: document.getElementById('new-mech-spec').value
+            });
+            setDB(DB_KEYS.MECHANICS, mechanics);
+            e.target.reset();
+            refreshAdminViews();
+            showToast('Mechanic added!');
+        }
+
+        function addService(e) {
+            e.preventDefault();
+            const services = getDB(DB_KEYS.SERVICES);
+            services.push({
+                id: Date.now(),
+                name: document.getElementById('new-srv-name').value,
+                price: Number(document.getElementById('new-srv-price').value)
+            });
+            setDB(DB_KEYS.SERVICES, services);
+            e.target.reset();
+            refreshAdminViews();
+            showToast('Service added!');
+        }
+
+        function deleteItem(dbKey, id) {
+            if (confirm("Are you sure you want to delete this?")) {
+                let data = getDB(dbKey);
+                data = data.filter(item => item.id !== id);
+                setDB(dbKey, data);
+                refreshAdminViews();
+                showToast('Item deleted successfully.');
+            }
+        }
+
+        // ==========================================
+        // UI NAVIGATION & HELPERS
+        // ==========================================
+        function navigateApp(viewId, navElement) {
+            document.querySelectorAll('.main-content .view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            if (navElement) {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                navElement.classList.add('active');
+            }
+            if (document.getElementById('sidebar').classList.contains('mobile-active')) toggleSidebar();
+            window.scrollTo(0, 0);
+        }
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('mobile-active'); }
+
+        // Run initialization on load
+        initDB();
+
+    </script>
+</body>
+
+</html>
